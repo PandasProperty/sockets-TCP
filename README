@@ -1,0 +1,34 @@
+325CA Nenu Anda Roxana
+Inainte de rulare va rog dati un make clean ( exprlicatie mai jos ).
+
+	Client:
+
+Cand un client se conecteaza trimite un mesaj de tip 0, avand in payload numele 
+lui si se trimite serverului. Acesta verifica daca pentru un mesaj de tip 0, in 
+vectorul de clienti exista un client cu numele primit, daca exista si este activ ii da kick, altfel este adaugat in vectorul de clienti.
+
+Pentru o comanda "listclients", clientul trimite un mesaj de tip 1, iar serverul
+la primirea unui mesaj de acest tip trimite un mesaj care are in payload toate
+numele clientilor din vectorul clienti.
+
+Pentru o comanda "message",clientul ii trimite serverului numele destinatarului,
+iar acesta ii raspunde cu portul si ip-ul (mesaj de tipul 31). Apoi trimite un 
+mesaj de tipul 3 clientului cautat, astfel conexiunea se realizeaza direct.
+
+Pentru o comanda "broadcast", clientul trimite un mesaj de tip 4 serverului, iar
+acesta ii raspunde cu mai multe mesaje de tip 31 ( port+ip ) a celorlalti clienti care sunt activi ( si verifica sa nu isi trimita lui ).Apoi cand clientul primeste un mesaj de tip 31 actioneaza ca in cazul lui "message".
+
+Pentru o comanda "sendfile" am lucrat in mare parte la fel, interogand serverul despre destinatar, si trimitand cate maxim 1024b, daca depaseste timeoutul, o variabila globala ne va spune ca mai avem de trimis. Si se trimite de unde am ramas dupa noile comenzi.
+
+Pentru comanda "history" am creat fisiere "_history" pentru fiecare client.
+Mesajele si fisierele primite sunt stocate aici. De aceea este important un make clean pentru a sterge celelelte fisiere "*_history" pentru o mai buna functionare a programului.
+
+Pentru comanda "quit" am folosit o variabila globala care ne spunea ca acest client este pe cale sa se inchida si astfel am putut oprii celelalte conexiuni existente in care era implicat.
+
+	Server:
+
+Pentru comanda "status" am verificat in vectorul meu de clienti care sunt activi si i-am afisat,atat adresele si porturile lor.
+
+Pentru comanda "kick" m-am folosit de "quit"-ul implementat la client, ambele apeland aceleasi functii. Iar comanda "quit" lucra asemanator numai ca mai inchidea si serverul.
+
+In mare mi s-a parut o tema foarte interesanta si draguta din care am invatat multe. :) 
